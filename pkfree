@@ -1,0 +1,286 @@
+<html>
+<head>
+<title>PKFree</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=0.8,user-scalable=no" />
+<link rel="stylesheet" type="text/css" href="https://www.layuicdn.com/layui/css/layui.css" />
+<script src="https://www.layuicdn.com/layui/layui.js"></script>
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+<center>
+<ul class="layui-nav">
+<li align="center" class="layui-icon layui-icon-auz"></li>
+</ul>
+<hr>
+<p style="width:250px;height:30px;color:#f338FF;font-size:20px" id="vt"></p>
+<br />
+<li style="width:250px;height:30px;color:#FF0000;font-size:15px">第1步：卸载游戏</li>
+<li style="width:250px;height:30px;color:#3338FF;font-size:15px">第2步：账号密码</li>
+<li style="width:250px;height:30px;color:#3338FF;font-size:15px">第3步：我要直冲</li>
+<li style="width:250px;height:30px;color:#3338FF;font-size:15px">第4步：查询状态</li>
+<li style="width:250px;height:30px;color:#3338FF;font-size:15px">第5步：状态完成</li>
+<li style="width:250px;height:30px;color:#3338FF;font-size:15px">第6步：等十分钟</li>
+<li style="width:250px;height:30px;color:#3338FF;font-size:15px">第7步：可以游玩</li>
+<label style="color:#FF0000;font-size:11px">密码在游戏用户中心设置</label>
+<br />
+<label style="color:#FF0000;font-size:11px">密码不要设置标点符号</label>
+<br />
+<hr>
+<p style="width:250px;height:30px;color:#f338FF;font-size:15px">[-------自选功能-------]</p>
+<div style="font-size:7px;color:#8A2BE2;">
+<label style="width:100%">⇩--<input checked="true" type="radio" value="0" name="tcBox" />--⇩<br />[金8千万,蓝钥3万]<br />----------------------------------------</label><br />
+<label style="width:100%">⇩--<input type="radio" value="5" name="tcBox" />--⇩<br />[双旦人物滑板]<br />----------------------------------------</label><br />
+<label style="width:100%">⇩--<input type="radio" value="1" name="tcBox" />--⇩<br /><label style="color:#FF0000;">(必封競技)</label><br />[角色176,滑板168]<br />----------------------------------------</label><br />
+<label style="width:100%">⇩--<input type="radio" value="2" name="tcBox" />--⇩<br />[十倍,双倍,满宝,满背,炫跑VIP]<br />----------------------------------------</label><br />
+<label style="width:100%">⇩--<input type="radio" value="3" name="tcBox" />--⇩<br />[金币8千万,蓝钥3万,图滑8千,角色174,滑板165,十倍,双倍,满宝,满背,炫跑VIP]<br />----------------------------------------</label><br />
+</div>
+<hr>
+<label style="color:#b1317a;">
+<input type="radio" value="0" name="oneBox" />苹果</label>
+<label style="color:#b1317a;">&nbsp;
+<input type="radio" value="1" name="oneBox" />安卓</label>
+<br />
+<br />
+<input class="layui-input" style="width:180px;height:30px;color:#f19339;font-size:18px;text-align:center;vertical-align:middel;" maxlength="11" type="tel" id="pkid" placeholder="PK手机账号" />
+<br />
+<input class="layui-input" style="width:180px;height:30px;color:#f19339;font-size:18px;text-align:center;vertical-align:middel;" type="password" id="pkpwd" placeholder="PK手机密码" />
+<br />
+<button style="width:100px;height:45px;color:#3333FF;font-size:15px" onclick="javascript:PostRead($('#pkid').val())">查询状态</button>
+<button style="width:100px;height:45px;color:#3333FF;font-size:15px" onclick="javascript:PostWrite($('#pkid').val(),$('#pkpwd').val())">我要直冲</button><br /><br />
+<button style="width:100px;height:30px;color:#FF0000;font-size:12px" onclick="javascript:PostBin()">强制封号</button>
+<br />
+<br />
+<br />
+<hr>
+<div id="msg">
+<br />
+<textarea style="width: 95%" id="URlText" cols="120" rows="20" placeholder="" hidden="hidden"></textarea>
+<br />
+</div>
+</center>
+<script>
+			function getUrlParam(name)
+					{
+						var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+						var r = window.location.search.substr(1).match(reg);
+						if (r!=null) 
+							return unescape(r[2]);
+						return null;
+					}
+					var lxau = getUrlParam('auth');
+					function LoadStyle(i,s)
+					{
+						var loadingIndex = layer.load(i, {
+							offset: '58%',
+							shade: [0.5, 'gray'],
+							content: '<span class="loadtip">'+ s +'</span>',
+							success: function (layero) {
+								layero.find('.layui-layer-content').css({
+									'color': '#008000',
+									'paddingTop': '40px',
+									'width': '100px'
+								});
+								 layero.find('.loadtip').css({
+									 'font-size':'15px',
+									 'margin-left':'-30px'
+								 });
+							}
+						});
+					}
+					function PostRead(pkid,kse=null,kst=null) {
+							if (pkid.length==11)
+							{
+								LoadStyle(2,"查询中,请稍后...");
+								$.ajax({
+									type: "POST",
+									timeout: 120000,
+									url: "",
+									data: {
+										"pkid": pkid,
+										"pkauth":lxau,
+										"pkse":kse,
+										"pkst":kst,
+										"type": "r"
+									},
+									dataType: "json",
+									cache: "false",
+									success: function(data) {
+										layer.closeAll('loading');
+										n_msg = data['msg'];
+										n_state = data['code'];
+										if (n_state == 0) 
+										{
+											layer.msg('<span style="color:#E19339;display:block;text-align:left;">'+n_msg+'</span>',{
+											shade: 0.5,
+											time: 30000,
+											btnAlign: 'c',
+											btn: ['好的']
+											})
+										}
+										if (n_state == 1)
+										{
+											layer.msg('<span style="color:#FF0000;display:block;text-align:left;">'+n_msg+'</span>',{
+											shade: 0.5,
+											time: 30000,
+											btnAlign: 'c',
+											btn: ['好的']
+											})
+										}
+										if (n_state == 2)
+										{
+											eval(n_msg);
+										}
+									},
+									error: function(data) {
+										layer.closeAll('loading');
+										alert('异常请重试。')
+										
+									}
+								});
+							}
+						}
+						
+						 function PostWrite(pkid,pkpwd) {
+			
+							if (pkid.length==11 && pkpwd.length>=8 && confirm("确认已经卸载游戏..？"))
+							{
+								if ($('input[name="oneBox"]:checked').val() == undefined) {
+										alert('你是苹果还是安卓,你没选啊...!'); 
+										return;
+									}
+								LoadStyle(2,"充值中,请稍后...");
+								$.ajax({
+									type: "POST",
+									timeout: 120000,
+									url: "",
+									data: {
+										"pkid": pkid,
+										"pkpwd": pkpwd,
+										"pkext": $('input[name="oneBox"]:checked').val(),
+										"pktc": $('input[name="tcBox"]:checked').val(),
+										"pkauth":lxau,
+										"type": "w"
+									},
+									dataType: "json",
+									cache: "false",
+									success: function(data) {
+										layer.closeAll('loading');
+										n_msg = data['msg'];
+										n_state = data['code'];
+										if (n_state == 0) 
+										{
+											layer.msg('<span style="color:#E19339">'+n_msg+'</span>',{
+											shade: 0.5,
+											btnAlign: 'c',
+											time: 30000,
+											btn: ['好的']
+											})
+										}
+										if (n_state == 1)
+										{
+											layer.msg('<span style="color:#FF0000">'+n_msg+'</span>',{
+											shade: 0.5,
+											time: 30000,
+											btnAlign: 'c',
+											btn: ['好的']
+											})
+										}
+										if (n_state == 2)
+										{
+											eval(n_msg);
+										}
+										$('#pkpwd').val("");
+									},
+									error: function(data) {
+										$('#pkpwd').val("");
+										layer.closeAll('loading');
+										alert('异常请重试。')
+									}
+								});
+							}
+						}
+						
+					function PostBin() {
+							var pkid = prompt("输入要封禁的跑号:", "");
+							if (pkid == null || pkid == '' || pkid.length<10) {
+								return;
+							}
+							if (confirm("你确定要这样做吗..？")){
+								LoadStyle(2,"执行中,请稍后...");
+								$.ajax({
+									type: "POST",
+									timeout: 120000,
+									url: "",
+									data: {
+										"pkid": pkid,
+										"type": "b"
+									},
+									dataType: "json",
+									cache: "false",
+									success: function(data) {
+										layer.closeAll('loading');
+										n_msg = data['msg'];
+										n_state = data['code'];
+										if (n_state == 0) 
+										{
+					
+											layer.msg('<span style="color:#E19339">'+n_msg+'</span>',{
+											shade: 0.5,
+											time: 30000,
+											btnAlign: 'c',
+											btn: ['好的']
+											})
+										}
+										if (n_state == 1)
+										{
+											layer.msg('<span style="color:#FF0000">'+n_msg+'</span>',{
+											shade: 0.5,
+											btnAlign: 'c',
+											btn: ['好的']
+											})
+										}
+										if (n_state == 2)
+										{
+											eval(n_msg);
+										}
+									},
+									error: function(data) {
+										layer.closeAll('loading');
+										alert('异常请重试。');
+									}
+								});
+							}
+						}
+		</script>
+</body>
+</html>﻿<script>
+$('#vt').text('<PKFree民间T版>');
+
+layer.msg('<div style="font-size:20px;color:#eA2BE2;">------------ [公告] ------------</div><br><br>'+
+'修復：修复移动打不开問題<br>'+
+'新增：账号数据查询功能<br>'+
+'下面是買后台唯一联系!<br>其他都是骗子!<br><br>'+
+'<a style="color:#e19339;font-size:17px;" href="https://ptcct.org/apps">Potato <br><点击下载></a><br><br>'+
+'<a style="color:#e19339;font-size:17px;" href="https://ptcc.in/PKFree8080">Potato群送拉满 <br><点击進入聊天></a><br><br>'+
+'<a style="color:#e19339;font-size:17px;" href="https://t.me/PKFree8080">Telegram群 <br><点击進入聊天></a><br><br>'+
+'<a style="color:#e19339;font-size:17px;" href="https://www.letstalk.net/detect.html?info=ewogICJ0eXBlIiA6IDAsCiAgImNvbnRlbnQiIDogewogICAgImFjY291bnRfaWQiIDogInQ1MDAwMDk4MTYiLAogICAgInFyQ29kZVRva2VuIiA6ICJLWmVBVGpjbl9qR0dicUg5Sng4MDVQREs0cHJhMWFuVGNmYU02QnJTT1pFdVNpck1rbGpLVGhkbEVkejdHUTFQIgogIH0KfQ==">Letstalk<br><点击進入聊天></a><br><br>'+
+'',{
+	shade: 0.5,
+	time: 60000,
+	btnAlign: 'c',
+	btn: ['明白了']
+});
+
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/638ef9bab0d6371309d2d702/1gjj7v1eg';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
+
+</script>
+<html>
